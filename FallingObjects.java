@@ -2,7 +2,8 @@ import processing.core.*;
 
 class FallingObjects extends PApplet {
     // Position
-    float xPosition, yPosition;
+    float xPosition;
+    float yPosition;
     // Velocity
     float Velocity;
     // Radius
@@ -17,7 +18,7 @@ class FallingObjects extends PApplet {
         //image(Game.Apple, xPosition, yPosition, Radius, Radius);
     }
 
-    public void move() {
+    public void moveDown() {
         yPosition += Velocity;
     }
 

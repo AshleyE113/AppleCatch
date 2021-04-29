@@ -38,7 +38,7 @@ public class Game extends PApplet {
 
         for (int i = 0; i < totalDrops; i++) {
             Objects[i].display();
-            Objects[i].move();
+            Objects[i].moveDown();
 
         }
 
