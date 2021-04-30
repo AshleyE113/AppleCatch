@@ -12,13 +12,15 @@ public class Game extends PApplet {
     FallingObjects[] Objects;
     int totalDrops = 0;
     public static PImage Apple;
+    public static PImage bg_game;
 
     public void settings() {
         size(580, 400);
     }
 
     public void setup() {
-        Apple = loadImage("../AppleCatch/apple.png");
+        Apple = loadImage("apple.png");
+        bg_game = loadImage("bg_game.png")
         Objects = new FallingObjects[1000];
         timer = new Timer(300);
         timer.start();
@@ -26,7 +28,7 @@ public class Game extends PApplet {
     }
 
     public void draw() {
-        background(240);
+        background(bg_game);
         if (timer.isFinished()) {
             Objects[totalDrops] = new FallingObjects();
             totalDrops++;
