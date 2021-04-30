@@ -6,7 +6,6 @@ class Character extends PApplet {
 	float width;
 	float posX;
 	float posY;
-	float x,y;
 	
 	Character(){
 		height = 75;
@@ -34,6 +33,20 @@ class Character extends PApplet {
 					posX++;
 				}
 			}
+		}
+	}
+
+	public boolean Intersect(FallingObject fallingObject) {
+		// Finds The Distance Between The Player And Apple
+		float distance = dist(posX, posY, fallingObject.xPosition, fallingObject.yPosition);
+
+		if (distance < height/2 + fallingObject.Radius) {
+			// Player And Apple Intersected
+			return true;
+		}
+		else {
+			// Player And Apple Did Not intersect
+			return false;
 		}
 	}
 	
