@@ -50,6 +50,29 @@ class Character extends PApplet {
 		}
 	}
 	
+	
+	//let me know if this could work as score counter? instead of the boolean method above for intersect
+	public void Score(FallingObject fallingObject) {
+		// Finds The Distance Between The Player And Apple
+		int score = 0;
+		int maxscore = 10;
+		
+		float distance = dist(posX, posY, fallingObject.xPosition, fallingObject.yPosition);
+
+		while (score<=maxscore) {
+			if (distance < height/2 + fallingObject.Radius) {
+				// Player And Apple Intersected
+				score+=1;
+			}
+			else {
+				// Player And Apple Did Not intersect
+				score+=0;
+			}
+			
+		textSize(30);
+		text("Score: "+score,10,30);
+		}
+	}
 }
 
 	
