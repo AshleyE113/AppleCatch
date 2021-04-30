@@ -11,6 +11,7 @@ public class Game extends PApplet {
 
 
     Timer timer;
+    Character player;
     FallingObject[] fallingObjects = new FallingObject[100];
     int totalObjects = 0;
     public static PImage Apple;
@@ -30,6 +31,7 @@ public class Game extends PApplet {
         }
 
         timer = new Timer(300);
+        player = new Character();
         timer.start();
         smooth();
     }
@@ -46,11 +48,12 @@ public class Game extends PApplet {
             timer.start();
         }
         for (int i = 0 ; i< fallingObjects.length;i++){
-
             fallingObjects[i].display();
             fallingObjects[i].moveDown();
+            if(player.Intersect(fallingObjects[i])){
+                fallingObjects[i].caught();
+                FallingObject.objectsCaught ++;
+            }
         }
-
     }
-
 }
