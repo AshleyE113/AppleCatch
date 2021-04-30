@@ -5,32 +5,60 @@ class Character extends PApplet {
 	float height;
 	float width;
 	float posX;
-	float posY;
+	float posY;b
+	PImage playerImages[];
+	public static PImage player;
+	int player_img;
+	int currentFrame;
+	boolean inMotion;
 	
 	Character(){
 		height = 75;
 		width = 100;
 		posX = 250;
 		posY = 0;
+		currentFrame = 0;
+		inMotion = false;
+		player_img = 3;
+	}
+	
+	public void setup() {
+		playerImages = new PImage[player_img];
+		for(int i = 0; i < player_img; i++) {
+			playerImages[i] = loadImage("spr_player"+i+".png");
+		}
+		
 	}
 	
 	public void drawPlayer() {
 		//currently put in a brown rectangle as player but could change with an image
 		// starts at the bottom and right in the middle of horizontal width
-		stroke(204,132,0);
-		fill(204,102,0);
-		rect(posX, posY, width, height);
+		if (inMotion)
+			image(playerImages[currentFrame],0, 200);
+		else
+			image(playerImages[1],0, 200);
+		//currentFrame++;
+		//System.out.print(currentFrame);
+		
+		//if (currentFrame == loopFrames-1) {
+		//	currentFrame = 0;
+		//}
 	}
 	
 	public void Movement() {
 		// if player presses left key, move by 50px, presses right key move by 50px, starts right at middle 
+		currentFrame = (currentFrame + 0.5)%3
 		if (keyPressed) {
 			if (key == CODED) {
 				if (keyCode == LEFT) {
+					inMotion = true;
+					System.out.print("Left");
 					posX--;
 				} 
 				else if (keyCode == RIGHT) {
+					inMotion = true;
 					posX++;
+					System.out.print("Right");					
 				}
 			}
 		}
@@ -50,6 +78,9 @@ class Character extends PApplet {
 		}
 	}
 	
+	public static void main(String[] args) {
+		PApplet.main("Character");
+	}
 }
 
 	
