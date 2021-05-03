@@ -1,7 +1,5 @@
 import processing.core.*;
 
-import java.util.Arrays;
-
 public class Game extends PApplet {
 
     public static void main(String[] args) {
@@ -12,7 +10,7 @@ public class Game extends PApplet {
 
     Timer timer;
     Character player;
-    FallingObject[] fallingObjects = new FallingObject[100];
+    FallingObject[] apples = new FallingObject[100];
     int totalObjects = 0;
     public static PImage Apple;
     public static PImage bg_game;
@@ -26,8 +24,8 @@ public class Game extends PApplet {
         Apple = loadImage("apple.png");
         bg_game = loadImage("bg_game.png");
 
-        for (int i = 0 ; i< fallingObjects.length;i++){
-            fallingObjects[i] = new FallingObject();
+        for (int i = 0 ; i< apples.length;i++){
+            apples[i] = new FallingObject(this);
         }
 
         timer = new Timer(300);
@@ -38,22 +36,25 @@ public class Game extends PApplet {
 
 
     public void draw() {
-        background(bg_game);
+        background(225);
+        //background(bg_game);
         if (timer.isFinished()) {
-            fallingObjects[totalObjects] = new FallingObject();
+            apples[totalObjects] = new FallingObject(this);
             totalObjects++;
-            if (totalObjects >= fallingObjects.length) {
+            if (totalObjects >= apples.length) {
                 totalObjects= 0;
             }
             timer.start();
         }
-        for (int i = 0 ; i< fallingObjects.length;i++){
-            fallingObjects[i].display();
-            fallingObjects[i].moveDown();
-            if(player.Intersect(fallingObjects[i])){
-                fallingObjects[i].caught();
+        for (int i = 0 ; i< apples.length;i++){
+            apples[i].display();
+            apples[i].moveDown();
+            if(player.Intersect(apples[i])){
+                apples[i].caught();
                 FallingObject.objectsCaught ++;
             }
         }
+
     }
+
 }
