@@ -1,17 +1,31 @@
 import processing.core.*;
 
 class FallingObject extends PApplet {
-    float Radius;
-    float xPosition;
-    float yPosition;
-    float Velocity;
+    protected float xPosition;
+    protected float yPosition;
+    protected float Radius;
+    protected float Velocity;
+    static int objectsCaught = 0;
 
+    PApplet canvas;
 
-    FallingObject() {
-        Radius = 8;
-        xPosition = random(width);
-        yPosition = -Radius*4;
-        Velocity = random(1, 5);
+    public FallingObject ( PApplet canvas ) {
+        this.canvas = canvas;
+        Radius = 48;
+        xPosition = canvas.random(canvas.width);
+        yPosition = -Radius *4;
+        Velocity = canvas.random(1, 5);
+
+    }
+
+    void display() {
+        this.canvas.image(Game.Apple, xPosition, yPosition, Radius, Radius);
+        /*
+        canvas.fill(230,167,45);
+        canvas.stroke(230,167,45);
+        this.canvas.ellipse(xPosition, yPosition, Radius, Radius);
+
+         */
     }
 
     void moveDown() {
@@ -19,7 +33,7 @@ class FallingObject extends PApplet {
     }
 
     public boolean reachedBottom() {
-        if (yPosition > height + Radius*4) {
+        if (yPosition > height + Radius) {
             Velocity = 0;
             yPosition = -1000;
             return true;
@@ -27,14 +41,6 @@ class FallingObject extends PApplet {
             return false;
         }
     }
-
-    void display() {
-       //image(Game.Apple, xPosition, yPosition, Radius, Radius);
-        noStroke();
-        fill(230,167,45);
-        ellipse(xPosition, yPosition, Radius*2, Radius*2);
-    }
-
 
     public void caught() {
         Velocity = 0;
