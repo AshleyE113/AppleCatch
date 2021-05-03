@@ -46,12 +46,12 @@ public class Game extends PApplet {
             }
             timer.start();
         }
-        for (int i = 0 ; i< apples.length;i++){
-            apples[i].display();
-            apples[i].moveDown();
-            if(player.Intersect(apples[i])){
-                apples[i].caught();
-                FallingObject.objectsCaught ++;
+        for (FallingObject apple : apples) { //int i = 0 ; i< apples.length;i++
+            apple.display();
+            apple.moveDown();
+            if (player.Intersect(apple)) {
+                apple.caught();
+                FallingObject.objectsCaught++;
             }
         }
 
