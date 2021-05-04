@@ -7,7 +7,6 @@ public class Game extends PApplet {
         PApplet.main("Game");
     }
 
-
     Timer timer;
     Character player;
     FallingObject[] apples = new FallingObject[100];
@@ -34,7 +33,6 @@ public class Game extends PApplet {
         smooth();
     }
 
-
     public void draw() {
         background(225);
         //background(bg_game);
@@ -56,5 +54,4 @@ public class Game extends PApplet {
         }
 
     }
-
 }
