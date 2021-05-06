@@ -43,6 +43,7 @@ class FallingObject extends PApplet {
     }
 
     public void caught() {
+    	//System.out.println("We caught one!");
         Velocity = 0;
         yPosition = -1000;
     }
