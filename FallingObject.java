@@ -14,18 +14,12 @@ class FallingObject extends PApplet {
         Radius = 48;
         xPosition = canvas.random(canvas.width);
         yPosition = -Radius *4;
-        Velocity = canvas.random(1, 5);
+        Velocity = 2;
 
     }
 
     void display() {
         this.canvas.image(Game.Apple, xPosition, yPosition, Radius, Radius);
-        /*
-        canvas.fill(230,167,45);
-        canvas.stroke(230,167,45);
-        this.canvas.ellipse(xPosition, yPosition, Radius, Radius);
-
-         */
     }
 
     void moveDown() {
