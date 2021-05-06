@@ -9,12 +9,14 @@ public class Game extends PApplet {
     }
 
 
-    Timer timer;
+    Timer timer; // For Game Level
+    Timer waitTime; // For Apples
     Player player;
     PImage playerImages[];
 	//public static PImage player;
     FallingObject[] apples = new FallingObject[100];
-    int totalObjects = 0;
+    int activeApples = 0; // Apples That Have Been Created
+    public static int minApples = 0; // Minimum Apples Required
     public static PImage Apple;
     public static PImage bg_game;
     float height = 200;
@@ -35,26 +37,25 @@ public class Game extends PApplet {
         Apple = loadImage("apple.png");
         bg_game = loadImage("bg_game.png");
 
-        for (int i = 0 ; i< apples.length;i++){
-            apples[i] = new FallingObject(this);
-        }
+        waitTime = new Timer(1000);// 1 Second
+        waitTime.start();
+        timer = new Timer(40000); // 40 Seconds
+        timer.start();
+        smooth();
 
-        timer = new Timer(300);
         player = new Player();
     	playerImages = new PImage[player_img];
 		for(int i = 0; i < player_img; i++) {
 			playerImages[i] = loadImage("spr_player"+i+".png");
 		}
-        timer.start();
-        smooth();
     }
     
     public void keyPressed() {
     	
-    	// if (inMotion)
- 			//image(playerImages[currentFrame],0, 200);
- 		//else
- 			//image(playerImages[1],0, 200);
+    	 if (inMotion)
+ 			image(playerImages[currentFrame],0, 200);
+ 		else
+ 			image(playerImages[1],0, 200);
          
  		if (key == CODED) {
  			if (keyCode == LEFT) {
@@ -78,6 +79,13 @@ public class Game extends PApplet {
 
     public void draw() {
         background(bg_game);
+
+        fill(50, 10, 10, 150);
+        text("Level: ", 10, 20);
+        text("Score: " , 10, 30);
+        text("Apples Required: ", 10, 40);
+        text("Lives: ", 10, 50);
+
         while (inMotion) {
         	for (int i = 0; i < 3; i++) {
         	image(playerImages[i], posX, posY, width, height);
@@ -90,26 +98,29 @@ public class Game extends PApplet {
         while (!inMotion) {
         	image(playerImages[1], posX, posY, width, height);
         }
-        
+
         //player.drawPlayer();       
-       
-        if (timer.isFinished()) {
-            apples[totalObjects] = new FallingObject(this);
-            totalObjects++;
-            if (totalObjects >= apples.length) {
-                totalObjects= 0;
+
+        if (waitTime.isFinished()) {
+            // Populate
+            apples[activeApples] = new FallingObject(this);
+            // Add to the Apples Ready
+            activeApples++;
+            // Start Over
+            if (activeApples >= apples.length) {
+                activeApples = 0;
             }
-            timer.start();
+            // Wait Time For Next Apple To Be Created
+            waitTime.start();
         }
-        for (FallingObject apple : apples) { //int i = 0 ; i< apples.length;i++
-            apple.display();
-            apple.moveDown();
-            if (player.Intersect(apple)) {
-                apple.caught();
+
+        for (int i = 0; i < activeApples; i++) { //int i = 0 ; i< apples.length;i++
+            apples[i].display();
+            apples[i].moveDown();
+            if (player.Intersect(apples[i])) {
+                apples[i].caught();
                 FallingObject.objectsCaught++;
             }
         }
-
     }
-
 }
