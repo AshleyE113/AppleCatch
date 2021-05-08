@@ -83,7 +83,7 @@ public class Game extends PApplet {
         text("Apples Required: ", 10, 40);
         text("Lives: ", 10, 50);
 			if (inMotion) {
-			 currentFrame = (int) Math.abs((posX)%3);
+			 currentFrame = (int) Math.abs((posX)%3); //Makes ani happen
 			 image(playerImages[currentFrame], posX, posY, width, height);
 				
 			}  
