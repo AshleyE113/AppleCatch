@@ -62,6 +62,7 @@ class Player extends PApplet {
 		*/
 	}
 
+
 	public boolean Intersect(FallingObject fallingObject, float xLPosition, float xRPosition, float yPos) {
 		if((fallingObject.yPosition == yPos) && ( fallingObject.xPosition >= xLPosition && fallingObject.xPosition <= xRPosition) ){
 			return true;
