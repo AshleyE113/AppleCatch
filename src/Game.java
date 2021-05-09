@@ -23,6 +23,8 @@ public class Game extends PApplet {
     public static PImage TitleScreen;
     public static PImage LossScreen;
     public static PImage WinScreen;
+	public static PImage StartB;
+	public static PImage RestartB;
     float height = 200;
     float width = 225;
     float posX = 250;
@@ -33,6 +35,10 @@ public class Game extends PApplet {
 	int playerLives = 3;
 	boolean inMotion = false;
 	boolean paused = false;
+	boolean playGame = false;
+	boolean mouseInStart = false;
+	boolean mouseInRestart = false;
+	boolean ToStart = false;
 
     public void settings() {
         size(500, 500);
@@ -40,11 +46,14 @@ public class Game extends PApplet {
 
 
     public void setup() {
+    	frameRate(60);
         Apple = loadImage("apple.png");
         bg_game = loadImage("bg_game.png");
         TitleScreen = loadImage("ACTS.png");
         LossScreen = loadImage("AC_Loss.png");
         WinScreen = loadImage("AC_Win.png");
+        StartB = loadImage("StartB.png");
+		RestartB = loadImage("RestartB.png");
 
         for (int i = 0 ; i< apples.length;i++){
             apples[i] = new FallingObject(this);
@@ -60,7 +69,6 @@ public class Game extends PApplet {
 		for(int i = 0; i < player_img; i++) {
 			playerImages[i] = loadImage("spr_player"+i+".png");
 		}
-        
     }
     
     public void keyPressed() {
@@ -94,16 +102,60 @@ public class Game extends PApplet {
     }
 }
     
+public void StartScreen() {
+	background(TitleScreen);
+	image(StartB, 10, 420);
+	System.out.println("Start!");
+	
+	if ((mouseX >= 4 && mouseY >= 418) && (mouseX <= 138 && mouseY <= 482)){
+		mouseInStart = true;
+	}
+	
+}
+
+public void LoseScreen() {
+	background(LossScreen);
+	image(RestartB, 180, 355);
+	
+	if ((mouseX >= 176 && mouseY >= 352) && (mouseX <= 305 && mouseY <= 416)){
+		mouseInRestart = true;
+	}
+	
+}
+
+public void WinScreen() {
+	background(WinScreen);
+	image(RestartB, 180, 400);
+	
+	if ((mouseX >= 179 && mouseY >= 398) && (mouseX <= 305 && mouseY <= 460)){
+		mouseInRestart = true;
+	}
+	
+}
+
+
+
+public void mouseClicked() {
+	if (mouseInStart) {
+		playGame = true;
+	}
+	
+	if (mouseInRestart) {
+		ToStart = true;
+	}
+}
     
 
     public void draw() {
+    	StartScreen();
+    if (playGame) {
         background(bg_game);
         fill(50, 10, 10, 150);
         text("Level: ", 10, 20);
         text("Score: " , 10, 30);
         text(FallingObject.objectsCaught, 50, 30);
         text("Apples Required: 20", 10, 40);
-        text((timer.passedTime/100), 10, 50);
+        text((timer.passedTime/1000), 10, 50);
         text("Lives: ", 10, 60);
         
 		if (inMotion) {
@@ -111,6 +163,12 @@ public class Game extends PApplet {
 		 image(playerImages[currentFrame], posX, posY, width, height);		
 		}  else {
 			image(playerImages[1], posX, posY, width, height);
+		}
+		
+		if (posX > 510) {
+			posX = -10;
+		} else if (posX < -15) {
+			posX = 505;
 		}
        
 
@@ -139,10 +197,16 @@ public class Game extends PApplet {
         }
         
         if (FallingObject.objectsCaught >= 20 && (!timer.isFinished())){
-        	background(WinScreen);
+        	WinScreen();
+        	if (ToStart) {
+        		StartScreen();
+        	}
         } else if (FallingObject.objectsCaught <= 20 && timer.isFinished()) {
-        	background(LossScreen);
+        	LoseScreen();
+        	if (ToStart) {
+        		StartScreen();
+        	}
         }
     }
-
+   }
 }
