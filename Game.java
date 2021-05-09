@@ -8,7 +8,6 @@ public class Game extends PApplet {
         PApplet.main("Game");
     }
 
-
     Timer timer; // For Game Level
     Timer waitTime; // For Apples
     Timer gameStatus; // For status text
@@ -37,7 +36,6 @@ public class Game extends PApplet {
     public void settings() {
         size(500, 500);
     }
-
 
     public void setup() {
         Apple = loadImage("apple.png");
@@ -82,8 +80,6 @@ public class Game extends PApplet {
             }
         }
     }
-
-
 
     public void draw() {
         background(bg_game);
