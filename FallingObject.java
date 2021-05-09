@@ -26,7 +26,7 @@ class FallingObject extends PApplet {
     }
 
     public boolean reachedBottom() {
-        if (yPosition > height + Radius) {
+        if (yPosition > canvas.height + Radius) {
             Velocity = 0;
             yPosition = -1000;
             return true;
