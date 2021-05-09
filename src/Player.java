@@ -66,17 +66,12 @@ class Player extends PApplet {
 
 		if (distance < height/2 + fallingObject.Radius) {
 			// Player And Apple Intersected
+			System.out.println("Caught");
 			return true;
 		}
 		else {
-			// Player And Apple Did Not intersect
+			System.out.println("Missed");
 			return false;
 		}
 	}
-	
-	//public static void main(String[] args) {
-	//	PApplet.main("Player");
-	//}
 }
-
-	

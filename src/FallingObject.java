@@ -20,12 +20,6 @@ class FallingObject extends PApplet {
 
     void display() {
         this.canvas.image(Game.Apple, xPosition, yPosition, Radius, Radius);
-        /*
-        canvas.fill(230,167,45);
-        canvas.stroke(230,167,45);
-        this.canvas.ellipse(xPosition, yPosition, Radius, Radius);
-
-         */
     }
 
     void moveDown() {

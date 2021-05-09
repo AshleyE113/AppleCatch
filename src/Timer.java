@@ -2,6 +2,7 @@ import processing.core.*;
 class Timer extends PApplet {
     int savedTime;
     int totalTime;
+    int passedTime;
 
     Timer(int tempTotalTime) {
         totalTime = tempTotalTime;
@@ -12,7 +13,7 @@ class Timer extends PApplet {
     }
 
     boolean isFinished() {
-        int passedTime = millis() - savedTime;
+        passedTime = millis() - savedTime;
         if (passedTime > totalTime) {
             return true;
         } else {
