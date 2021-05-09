@@ -4,7 +4,7 @@ class FallingObject extends PApplet {
     protected float xPosition;
     protected float yPosition;
     protected float Radius;
-    protected float Velocity;
+    protected static double Velocity;
     static int objectsCaught = 0;
 
     PApplet canvas;
@@ -14,7 +14,6 @@ class FallingObject extends PApplet {
         Radius = 48;
         xPosition = canvas.random(canvas.width);
         yPosition = -Radius *4;
-        Velocity = 2;
 
     }
 
