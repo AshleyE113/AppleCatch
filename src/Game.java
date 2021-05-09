@@ -107,6 +107,7 @@ public class Game extends PApplet {
   }
     
     public void StartScreen() {
+    	
     	background(TitleScreen);
     	image(StartB, 10, 420);
     	
@@ -154,6 +155,7 @@ public class Game extends PApplet {
     public void draw() {
     	StartScreen();
         if (playGame) {
+        	mouseInStart = false;
 	        background(bg_game);
 	        
 	        if (inMotion) {
@@ -241,17 +243,16 @@ public class Game extends PApplet {
 	        	
 	        	if (ToStart) {
 	        		StartScreen();
-	        		mouseInStart = false;
-	            	playGame = false;
+	            	mouseInRestart = false;
 	        		//System.out.println("Back to Start!");
 	        	}
 	        } else if (FallingObject.objectsCaught <= 5 && timer.isFinished()) {
 	        	LoseScreen();
 	        	if (ToStart) {
 	        		StartScreen();
-	        		mouseInStart = false;
-	            	playGame = false;
+	            	mouseInRestart = false;
 	        		//System.out.println("Back to Start!");
+	            	//playGame = false;
 	        	}
 	        }
 	
