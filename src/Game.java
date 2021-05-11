@@ -1,4 +1,5 @@
 import processing.core.*;
+import ddf.minim.*;
 
 public class Game extends PApplet {
 
@@ -8,6 +9,7 @@ public class Game extends PApplet {
         PApplet.main("Game");
     }
     
+    Minim music;
     Pause pauseButton;
     Timer timer; // For Game Level
     Timer waitTime; // For Apples
@@ -26,6 +28,7 @@ public class Game extends PApplet {
     public static PImage WinScreen;
 	public static PImage StartB;
 	public static PImage RestartB;
+	//____________________________________________________
     float height = 200;
     float width = 225;
     float posX = 250;
@@ -35,12 +38,22 @@ public class Game extends PApplet {
     float xRightBasket = 423;
     int currentFrame = 0;
     int player_img = 3;
+    //_____________________________________________________
     boolean inMotion = false;
 	boolean paused = false;
 	boolean playGame = false;
 	boolean mouseInStart = false;
 	boolean mouseInRestart = false;
 	boolean ToStart = false;
+	boolean Win = false;
+	boolean Loss = false;
+	boolean caught = false;
+	//______________________________________________________
+	AudioPlayer TS_music;
+	AudioPlayer Game_music;
+	AudioPlayer WinMusic;
+	AudioPlayer LossMusic;
+	AudioPlayer CaughtSFX;
 
     public void settings() {
         size(500, 500);
@@ -70,6 +83,13 @@ public class Game extends PApplet {
         for(int i = 0; i < player_img; i++) {
             playerImages[i] = loadImage("spr_player"+i+".png");
         }
+        
+        music = new Minim(this);
+        TS_music = music.loadFile("StartMusic.mp3");
+        Game_music = music.loadFile("GameMusic.mp3");
+        WinMusic = music.loadFile("Winner.mp3");
+        LossMusic = music.loadFile("LossMusic.mp3");
+        CaughtSFX = music.loadFile("CaughtSFX.mp3");
     }
 
     public void keyPressed() {
@@ -108,8 +128,21 @@ public class Game extends PApplet {
     
     public void StartScreen() {
     	
+    	TS_music.play();
     	background(TitleScreen);
     	image(StartB, 10, 420);
+    	if (WinMusic.isPlaying()) {
+    		WinMusic.pause();
+    	}
+    	if (LossMusic.isPlaying()) {
+        	LossMusic.pause();
+    	}
+    	if (Game_music.isPlaying()) {
+    		Game_music.pause();
+    	}
+    	
+    	
+    	//ToStart = false;
     	
     	//System.out.println("Start!");
     	
@@ -124,6 +157,12 @@ public class Game extends PApplet {
     public void LoseScreen() {
     	background(LossScreen);
     	image(RestartB, 180, 355);
+    	LossMusic.play();
+    	
+    	if (Game_music.isPlaying()) {
+    		Game_music.pause();
+    		TS_music.pause();
+    	}
     	
     	if ((mouseX >= 176 && mouseY >= 352) && (mouseX <= 305 && mouseY <= 416)){
     		mouseInRestart = true;
@@ -134,7 +173,11 @@ public class Game extends PApplet {
     public void WinScreen() {
     	background(WinScreen);
     	image(RestartB, 180, 400);
-    	
+    	WinMusic.play();
+    	if (Game_music.isPlaying()) {
+    		Game_music.pause();
+    		TS_music.pause();
+    	}
     	if ((mouseX >= 179 && mouseY >= 398) && (mouseX <= 305 && mouseY <= 460)){
     		mouseInRestart = true;
     	}
@@ -144,19 +187,29 @@ public class Game extends PApplet {
     public void mouseClicked() {
     	if (mouseInStart) {
     		playGame = true;
-    		System.out.println("Clicked!");
+    		System.out.println("In Start Clicked!");
     	}
     	
     	if (mouseInRestart) {
     		ToStart = true;
+    		System.out.println("Restart Clicked!");
     	}
     }
 
     public void draw() {
     	StartScreen();
+    	
+    	
         if (playGame) {
-        	mouseInStart = false;
+        	
+        	if (TS_music.isPlaying()) {
+	    		TS_music.pause();
+	    		LossMusic.pause();
+	    		WinMusic.pause();
+        	}
 	        background(bg_game);
+	        
+	        Game_music.play();
 	        
 	        if (inMotion) {
 	            currentFrame = (int) Math.abs((posX)%3); //Makes ani happen
@@ -164,6 +217,7 @@ public class Game extends PApplet {
 	
 	        } else {
 	        	image(playerImages[1], posX, posY, width, height);
+	        	//caught = false;
 	        }
 	        
 	        /*
@@ -172,7 +226,10 @@ public class Game extends PApplet {
 			} else if (posX < 0) {
 				posX = 500;
 			}*/
-	
+	        
+	        
+	        //ORIGINL VALS: 12, 13, 15, 16, 18
+	       //Handles levels
 	        switch (Level) {
 	            case 1:
 	                minApples = 12;
@@ -182,17 +239,17 @@ public class Game extends PApplet {
 	            case 2:
 	                minApples = 13;
 	                timer = new Timer(35000); // 35 Seconds
-	                FallingObject.Velocity = 1.2;
+	                FallingObject.Velocity = 2;
 	                break;
 	            case 3:
 	                minApples = 15;
 	                timer = new Timer(30000); // 30 Seconds
-	                FallingObject.Velocity = 1.4;
+	                FallingObject.Velocity = 2;
 	                break;
 	            case 4:
 	                minApples = 16;
 	                timer = new Timer(25000); // 25 Seconds
-	                FallingObject.Velocity = 1.6;
+	                FallingObject.Velocity = 2;
 	                break;
 	            case 5:
 	                minApples = 18;
@@ -200,7 +257,25 @@ public class Game extends PApplet {
 	                FallingObject.Velocity = 2;
 	                break;
 	        }
+
+	        if (FallingObject.objectsCaught == minApples){
+	            Level++;
+                FallingObject.objectsCaught = 0;
+                player.lives = 10;
+	            //tell them they move onto next level
+	            if (Level>=6){
+	            	playGame = false;
+	            	Win = true;
+	            }
+	        }
+	        
+	        if ((player.lives <= 0) || (timer.isFinished() && (FallingObject.objectsCaught < minApples))) {
+	        	playGame = false;
+	        	Loss = true;
+	        }
 	
+	        
+	        
 	        fill(0, 0, 0);
 	        textSize(12);
 	        text("Level: " +  + Level, 20, 20);
@@ -220,44 +295,112 @@ public class Game extends PApplet {
 	            }
 	            // Wait Time For Next Apple To Be Created
 	            waitTime.start();
+	            
 	        }
 	
 	        // Only Apples That Have Been created Can Fall
 	        // Will Make On Apple Fall At A Time Since The Number Of Active Apples Is Always Changing by 1
-	        for (int i = 0 ; i< activeApples;i++) { //int i = 0 ; i< apples.length;i++
+	        for (int i = 0 ; i< activeApples;i++) {
+	        	println(caught);
 	            apples[i].display();
 	            apples[i].moveDown();
+	            //caught = false;
 	            if (player.Intersect(apples[i], xLeftBasket, xRightBasket, yBasket)){
 	                apples[i].caught();
+	                caught = true;
+	  
+	                //if (!CaughtSFX.isLooping()) {}
+	           
 	                FallingObject.objectsCaught++;
 	            }
 	            else if (apples[i].reachedBottom()){
 	                player.lives--;
 	            }
-	
+	            
 	        }
+        }
+        
+        if (Win) {
+        	WinScreen();
+        	///*
+        	if (ToStart) {
+        		StartScreen();
+            	mouseInRestart = false;
+            	mouseInStart = false;
+            	
+        		//System.out.println("Back to Start!");
+        	}
+        }
+        ///*
+        if (caught)
+        {
+        	CaughtSFX.play();
+        	System.out.print("playing");
+        	caught = false;
+        }//*/
+        
+        if (Loss) {
+        	
+        	LoseScreen();
+    	///*
+    	if (ToStart) {
+    		StartScreen();
+        	mouseInRestart = false;
+        	mouseInStart = false;
+        	//*/
+    		//System.out.println("Back to Start!");
+    	}
+       }
 	        
 	        //TEMPORARY! DON'T WORRY ABOUT IT! TRYING TO FIX AN ISSUE
+	        /*
 	        if (FallingObject.objectsCaught >= 5 && (!timer.isFinished())){
 	        	WinScreen();
 	        	
+	        	
+	        	///*
 	        	if (ToStart) {
 	        		StartScreen();
 	            	mouseInRestart = false;
+	            	mouseInStart = false;
+	            	
 	        		//System.out.println("Back to Start!");
 	        	}
+	        
 	        } else if (FallingObject.objectsCaught <= 5 && timer.isFinished()) {
 	        	LoseScreen();
+	        
+	        		//System.out.println("Back to Start!");
+	            	//playGame = false;
+	        	///*
 	        	if (ToStart) {
 	        		StartScreen();
 	            	mouseInRestart = false;
+	            	mouseInStart = false;
+	            	//*/
 	        		//System.out.println("Back to Start!");
-	            	//playGame = false;
 	        	}
-	        }
-	
+	        	//*/
+	        //}
+        
+        /*
+        if (ToStart) {
+        	
+        	mouseInRestart = false;
+        	mouseInStart = false;
+        	playGame = false;
+        } else if (Loss && ToStart){
+        	
+        	mouseInRestart = false;
+        	mouseInStart = false;
+        	playGame = false;
+        }*/
+      
 	    }
-  }
+    
+   
+  //}
+//}
 
-}
+//}
 

@@ -14,6 +14,7 @@ class FallingObject extends PApplet {
         Radius = 48;
         xPosition = canvas.random(canvas.width);
         yPosition = -Radius *4;
+        Velocity = 2;
 
     }
 

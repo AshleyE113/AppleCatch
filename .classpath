@@ -3,5 +3,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="src/Core java/core.jar"/>
+	<classpathentry kind="lib" path="src/Core java/jl1.0.1.jar"/>
+	<classpathentry kind="lib" path="src/Core java/jsminim.jar"/>
+	<classpathentry kind="lib" path="src/Core java/minim.jar"/>
+	<classpathentry kind="lib" path="src/Core java/mp3spi1.9.5.jar"/>
+	<classpathentry kind="lib" path="src/Core java/tritonus_aos.jar"/>
+	<classpathentry kind="lib" path="src/Core java/tritonus_share.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
