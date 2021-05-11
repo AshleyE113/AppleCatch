@@ -147,40 +147,51 @@ public class Game extends PApplet {
     	//System.out.println("Start!");
     	
     	if ((mouseX >= 10 && mouseY >= 419) && (mouseX <= 138 && mouseY <= 482)){
-    		text("TEST", 10, 419);
-    		text("TEST2", 138, 482);
+    		//text("TEST", 10, 419);
+    		//text("TEST2", 138, 482);
     		mouseInStart = true;
     	}
     	
     }
 
     public void LoseScreen() {
-    	background(LossScreen);
-    	image(RestartB, 180, 355);
-    	LossMusic.play();
     	
-    	if (Game_music.isPlaying()) {
+    	if (Game_music.isPlaying() || TS_music.isPlaying()) {
     		Game_music.pause();
     		TS_music.pause();
     	}
     	
+    	LossMusic.play();
+    	
+    	background(LossScreen);
+    	/*
+    	image(RestartB, 180, 355);
+    	
     	if ((mouseX >= 176 && mouseY >= 352) && (mouseX <= 305 && mouseY <= 416)){
     		mouseInRestart = true;
-    	}
+    	}*/
     	
     }
 
     public void WinScreen() {
-    	background(WinScreen);
-    	image(RestartB, 180, 400);
-    	WinMusic.play();
     	if (Game_music.isPlaying()) {
     		Game_music.pause();
+    		
+    	}
+    	
+    	if (TS_music.isPlaying()) {
     		TS_music.pause();
     	}
+    	
+    	WinMusic.play();
+    	
+    	background(WinScreen);
+    	/*
+    	image(RestartB, 180, 400);
+    	
     	if ((mouseX >= 179 && mouseY >= 398) && (mouseX <= 305 && mouseY <= 460)){
     		mouseInRestart = true;
-    	}
+    	}*/
     	
     }
 
@@ -189,11 +200,12 @@ public class Game extends PApplet {
     		playGame = true;
     		System.out.println("In Start Clicked!");
     	}
-    	
+    	/*
     	if (mouseInRestart) {
     		ToStart = true;
     		System.out.println("Restart Clicked!");
     	}
+    	*/
     }
 
     public void draw() {
@@ -232,27 +244,27 @@ public class Game extends PApplet {
 	       //Handles levels
 	        switch (Level) {
 	            case 1:
-	                minApples = 12;
+	                minApples = 5;
 	                timer = new Timer(40000); // 40 Seconds
 	                FallingObject.Velocity = 2;
 	                break;
 	            case 2:
-	                minApples = 13;
+	                minApples = 8;
 	                timer = new Timer(35000); // 35 Seconds
 	                FallingObject.Velocity = 2;
 	                break;
 	            case 3:
-	                minApples = 15;
+	                minApples = 10;
 	                timer = new Timer(30000); // 30 Seconds
 	                FallingObject.Velocity = 2;
 	                break;
 	            case 4:
-	                minApples = 16;
+	                minApples = 11;
 	                timer = new Timer(25000); // 25 Seconds
 	                FallingObject.Velocity = 2;
 	                break;
 	            case 5:
-	                minApples = 18;
+	                minApples = 12;
 	                timer = new Timer(20000); // 20 Seconds
 	                FallingObject.Velocity = 2;
 	                break;
@@ -261,7 +273,7 @@ public class Game extends PApplet {
 	        if (FallingObject.objectsCaught == minApples){
 	            Level++;
                 FallingObject.objectsCaught = 0;
-                player.lives = 10;
+                player.lives = 15;
 	            //tell them they move onto next level
 	            if (Level>=6){
 	            	playGame = false;
@@ -278,11 +290,10 @@ public class Game extends PApplet {
 	        
 	        fill(0, 0, 0);
 	        textSize(12);
-	        text("Level: " +  + Level, 20, 20);
+	        text("Level: " + Level, 20, 20);
 	        text("Score: " + FallingObject.objectsCaught, 20, 35);
 	        text("Apples Required: " + minApples, 20, 50);
-	        text((timer.passedTime/1000), 20, 56);
-	        text("Lives: " + player.lives, 20, 80);
+	        text("Lives: " + player.lives, 20, 65);
 	
 	        if (waitTime.isFinished()){
 	            // Populate
@@ -301,7 +312,7 @@ public class Game extends PApplet {
 	        // Only Apples That Have Been created Can Fall
 	        // Will Make On Apple Fall At A Time Since The Number Of Active Apples Is Always Changing by 1
 	        for (int i = 0 ; i< activeApples;i++) {
-	        	println(caught);
+	        	//println(caught);
 	            apples[i].display();
 	            apples[i].moveDown();
 	            //caught = false;
@@ -327,12 +338,10 @@ public class Game extends PApplet {
         		StartScreen();
             	mouseInRestart = false;
             	mouseInStart = false;
-            	
-        		//System.out.println("Back to Start!");
         	}
         }
         ///*
-        if (caught)
+        if (caught && !CaughtSFX.isLooping())
         {
         	CaughtSFX.play();
         	System.out.print("playing");
@@ -340,7 +349,6 @@ public class Game extends PApplet {
         }//*/
         
         if (Loss) {
-        	
         	LoseScreen();
     	///*
     	if (ToStart) {
@@ -352,55 +360,6 @@ public class Game extends PApplet {
     	}
        }
 	        
-	        //TEMPORARY! DON'T WORRY ABOUT IT! TRYING TO FIX AN ISSUE
-	        /*
-	        if (FallingObject.objectsCaught >= 5 && (!timer.isFinished())){
-	        	WinScreen();
-	        	
-	        	
-	        	///*
-	        	if (ToStart) {
-	        		StartScreen();
-	            	mouseInRestart = false;
-	            	mouseInStart = false;
-	            	
-	        		//System.out.println("Back to Start!");
-	        	}
-	        
-	        } else if (FallingObject.objectsCaught <= 5 && timer.isFinished()) {
-	        	LoseScreen();
-	        
-	        		//System.out.println("Back to Start!");
-	            	//playGame = false;
-	        	///*
-	        	if (ToStart) {
-	        		StartScreen();
-	            	mouseInRestart = false;
-	            	mouseInStart = false;
-	            	//*/
-	        		//System.out.println("Back to Start!");
-	        	}
-	        	//*/
-	        //}
-        
-        /*
-        if (ToStart) {
-        	
-        	mouseInRestart = false;
-        	mouseInStart = false;
-        	playGame = false;
-        } else if (Loss && ToStart){
-        	
-        	mouseInRestart = false;
-        	mouseInStart = false;
-        	playGame = false;
-        }*/
-      
-	    }
-    
-   
-  //}
-//}
-
-//}
+    }
+}
 

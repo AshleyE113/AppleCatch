@@ -13,7 +13,7 @@ class Player extends PApplet {
 //		width = 100;
 //		posX = 250;
 //		posY = 0;
-		lives = 10;
+		lives = 15;
 	}
 	/*
 	public void setup() {
